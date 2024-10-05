@@ -1,7 +1,7 @@
 # w3schools
 
 ### General Homepage
-* [https://pathfinder.w3schools.com/] (https://pathfinder.w3schools.com/)
+* [https://pathfinder.w3schools.com/](https://pathfinder.w3schools.com/)
 
 ### Python & Python Core Libraries
 * [https://www.w3schools.com/python/default.asp](https://www.w3schools.com/python/default.asp)
@@ -23,7 +23,7 @@
 * [https://www.w3schools.com/go/index.php](https://www.w3schools.com/go/index.php)
 
 ### Data Structures & Algorithms
-* [https://www.w3schools.com/dsa/index.php] (https://www.w3schools.com/dsa/index.php)
+* [https://www.w3schools.com/dsa/index.php](https://www.w3schools.com/dsa/index.php)
 
 ### Data Science
 * [https://www.w3schools.com/datascience/default.asp](https://www.w3schools.com/datascience/default.asp)
@@ -55,4 +55,4 @@
 * [https://www.w3schools.com/nodejs/default.asp](https://www.w3schools.com/nodejs/default.asp)
 * [https://www.w3schools.com/react/default.asp](https://www.w3schools.com/react/default.asp)
 * [https://www.w3schools.com/typescript/index.php](https://www.w3schools.com/typescript/index.php)
-
+* [https://www.w3schools.com/vue/index.php](https://www.w3schools.com/vue/index.php)
