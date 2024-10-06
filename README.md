@@ -26,6 +26,7 @@
 * [https://www.w3schools.com/dsa/index.php](https://www.w3schools.com/dsa/index.php)
 
 ### Data Science
+* [https://www.w3schools.com/statistics/index.php](https://www.w3schools.com/statistics/index.php)
 * [https://www.w3schools.com/datascience/default.asp](https://www.w3schools.com/datascience/default.asp)
 * [https://www.w3schools.com/ai/default.asp](https://www.w3schools.com/ai/default.asp)
 
@@ -40,6 +41,7 @@
 * [https://www.w3schools.com/cybersecurity/index.php](https://www.w3schools.com/cybersecurity/index.php)
 
 ### AWS
+* [https://www.w3schools.com/training/aws/home/](https://www.w3schools.com/training/aws/home/)
 * [https://www.w3schools.com/aws/index.php](https://www.w3schools.com/aws/index.php)
 
 ### Front End
