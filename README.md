@@ -4,7 +4,7 @@
 * [https://pathfinder.w3schools.com/](https://pathfinder.w3schools.com/)
 
 ### Python & Python Core Libraries
-* [https://www.w3schools.com/python/default.asp](https://www.w3schools.com/python/default.asp)
+* [Python](https://www.w3schools.com/python/default.asp)
 * [https://www.w3schools.com/python/numpy/default.asp](https://www.w3schools.com/python/numpy/default.asp)
 * [https://www.w3schools.com/python/pandas/default.asp](https://www.w3schools.com/python/pandas/default.asp)
 * [https://www.w3schools.com/python/scipy/index.php](https://www.w3schools.com/python/scipy/index.php)
