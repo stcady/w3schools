@@ -1,7 +1,7 @@
 # w3schools
 
 ### General Homepage
-* [https://pathfinder.w3schools.com/](https://pathfinder.w3schools.com/)
+* [Homepage](https://pathfinder.w3schools.com/)
 
 ### Python & Python Core Libraries
 * [Python](https://www.w3schools.com/python/default.asp)
