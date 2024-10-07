@@ -4,7 +4,7 @@
 * [Homepage](https://pathfinder.w3schools.com/)
 
 ### Python & Python Core Libraries
-* [Python](https://www.w3schools.com/python/default.asp)
+* [Python - Certified](https://www.w3schools.com/python/default.asp)
 * [https://www.w3schools.com/python/numpy/default.asp](https://www.w3schools.com/python/numpy/default.asp)
 * [https://www.w3schools.com/python/pandas/default.asp](https://www.w3schools.com/python/pandas/default.asp)
 * [https://www.w3schools.com/python/scipy/index.php](https://www.w3schools.com/python/scipy/index.php)
@@ -20,7 +20,7 @@
 * [https://www.w3schools.com/kotlin/index.php](https://www.w3schools.com/kotlin/index.php)
 
 ### Golang
-* [Go](https://www.w3schools.com/go/index.php)
+* [Go - Certified](https://www.w3schools.com/go/index.php)
 
 ### Data Structures & Algorithms
 * [https://www.w3schools.com/dsa/index.php](https://www.w3schools.com/dsa/index.php)
