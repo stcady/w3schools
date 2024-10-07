@@ -1,6 +1,6 @@
 # Python Django Tutorial
 
-### Virtual Environment
+## Virtual Environment
 It is suggested to have a dedicated virtual environment for each Django project, and one way to manage a virtual environment is venv, which is included in Python. The name of the virtual environment is your choice, in this tutorial we will call it myworld. Type the following in the command prompt, remember to navigate to where you want to create your project:
 ```
 python -m venv myworld
@@ -46,4 +46,13 @@ python manage.py startapp members
 ```
 Django creates a folder named members in my project. These are all files and folders with a specific meaning. You will learn about most of them later in this tutorial.
 
+### Django Views
+Django views are Python functions that take http requests and return http response, like HTML documents. A web page that uses Django is full of views with different tasks and missions. Views are usually put in a file called views.py located on your app's folder. Find it and open it, and replace the content with this:
+```
+from django.shortcuts import render
+from django.http import HttpResponse
 
+def members(request):
+    return HttpResponse("Hello world!")
+```
+This is a simple example on how to send a response back to the browser. But how can we execute the view? Well, we must call the view via a URL.
