@@ -20,7 +20,7 @@
 * [https://www.w3schools.com/kotlin/index.php](https://www.w3schools.com/kotlin/index.php)
 
 ### Golang
-* [https://www.w3schools.com/go/index.php](https://www.w3schools.com/go/index.php)
+* [Go](https://www.w3schools.com/go/index.php)
 
 ### Data Structures & Algorithms
 * [https://www.w3schools.com/dsa/index.php](https://www.w3schools.com/dsa/index.php)
