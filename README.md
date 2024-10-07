@@ -36,13 +36,13 @@
 * [https://www.w3schools.com/postgresql/index.php](https://www.w3schools.com/postgresql/index.php)
 * [https://www.w3schools.com/mongodb/index.php](https://www.w3schools.com/mongodb/index.php)
 
-
 ### Cyber Security
 * [https://www.w3schools.com/cybersecurity/index.php](https://www.w3schools.com/cybersecurity/index.php)
 
 ### AWS
 * [https://www.w3schools.com/training/aws/home/](https://www.w3schools.com/training/aws/home/)
 * [https://www.w3schools.com/aws/index.php](https://www.w3schools.com/aws/index.php)
+* [https://aws.amazon.com/training/?nc2=sb_tc](https://aws.amazon.com/training/?nc2=sb_tc)
 
 ### Front End
 * [https://www.w3schools.com/html/default.asp](https://www.w3schools.com/html/default.asp)
