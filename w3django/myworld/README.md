@@ -14,7 +14,7 @@ Note: You must activate the virtual environment every time you open the command 
 (myworld) ... $
 ```
 
-### Install Django
+## Install Django
 Django is installed using pip, with this command:
 ```
 (myworld) ... $ python -m pip install Django
@@ -24,7 +24,7 @@ You can check if Django is installed by asking for its version number like this:
 django-admin --version
 ```
 
-### Django Create Project
+## Django Create Project
 Once you have come up with a suitable name for your Django project, like mine: my_tennis_club, navigate to where in the file system you want to store the code (in the virtual environment), I will navigate to the myworld folder, and run this command in the command prompt:
 ```
 django-admin startproject my_tennis_club
@@ -37,7 +37,7 @@ python manage.py runserver
 ```
 Open a new browser window and type 127.0.0.1:8000 in the address bar.
 
-### Create App
+## Create App
 An app is a web application that has a specific meaning in your project, like a home page, a contact form, or a members database. In this tutorial we will create an app that allows us to list and register members in a database. But first, let's just create a simple Django app that displays "Hello World!".
 
 I will name my app members. Start by navigating to the selected location where you want to store the app, in my case the my_tennis_club folder, and run the command below.
@@ -46,7 +46,7 @@ python manage.py startapp members
 ```
 Django creates a folder named members in my project. These are all files and folders with a specific meaning. You will learn about most of them later in this tutorial.
 
-### Django Views
+## Django Views
 Django views are Python functions that take http requests and return http response, like HTML documents. A web page that uses Django is full of views with different tasks and missions. Views are usually put in a file called views.py located on your app's folder. Find it and open it, and replace the content with this:
 ```
 from django.shortcuts import render
@@ -56,3 +56,75 @@ def members(request):
     return HttpResponse("Hello world!")
 ```
 This is a simple example on how to send a response back to the browser. But how can we execute the view? Well, we must call the view via a URL.
+
+## Django URLs
+Create a file named urls.py in the same folder as the views.py file, and type this code in it:
+```
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('members/', views.members, name='members'),
+]
+```
+The urls.py file you just created is specific for the members application. We have to do some routing in the root directory my_tennis_club as well. This may seem complicated, but for now, just follow the instructions below. There is a file called urls.py on the my_tennis_club folder, open that file and add the include module in the import statement, and also add a path() function in the urlpatterns[] list, with arguments that will route users that comes in via 127.0.0.1:8000/. Then your file will look like this:
+```
+from django.contrib import admin
+from django.urls import include, path
+
+urlpatterns = [
+    path('', include('members.urls')),
+    path('admin/', admin.site.urls),
+]
+```
+If the server is not running, navigate to the /my_tennis_club folder and execute this command in the command prompt:
+```
+python manage.py runserver
+```
+In the browser window, type 127.0.0.1:8000/members/ in the address bar.
+
+## Django Templates
+In the Django Intro page, we learned that the result should be in HTML, and it should be created in a template, so let's do that. Create a templates folder inside the members folder, and create a HTML file named myfirst.html. Open the HTML file and insert the following:
+```
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Hello World!</h1>
+<p>Welcome to my first Django project!</p>
+
+</body>
+</html>
+```
+Open the views.py file and replace the members view with this:
+```
+from django.http import HttpResponse
+from django.template import loader
+
+def members(request):
+  template = loader.get_template('myfirst.html')
+  return HttpResponse(template.render())
+```
+To be able to work with more complicated stuff than "Hello World!", We have to tell Django that a new app is created. This is done in the settings.py file in the my_tennis_club folder. Look up the INSTALLED_APPS[] list and add the members app like this:
+```
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'members'
+]
+```
+Then run this command:
+```
+python manage.py migrate
+```
+Start the server by navigating to the /my_tennis_club folder and execute this command:
+```
+python manage.py runserver
+```
+In the browser window, type 127.0.0.1:8000/members/ in the address bar.
+
+## Django Models
