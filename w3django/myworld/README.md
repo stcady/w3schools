@@ -612,3 +612,28 @@ If the server is not running, navigate to the /my_tennis_club folder and execute
 ```sh
 python manage.py runserver 
 ```
+
+# Admin
+
+## Django Admin
+Django Admin is a really great tool in Django, it is actually a CRUD* user interface of all your models!
+
+To enter the admin user interface, start the server by navigating to the /myworld folder and execute this command:
+```sh
+python manage.py runserver
+```
+In the browser window, type 127.0.0.1:8000/admin/ in the address bar. If the page does not fully render then reset the debug mode to True.
+
+The reason why this URL goes to the Django admin log in page can be found in the urls.py file of your project:
+```python
+from django.contrib import admin
+from django.urls import include, path
+
+urlpatterns = [
+    path('', include('members.urls')),
+    path('admin/', admin.site.urls),
+]
+```
+The urlpatterns[] list takes requests going to admin/ and sends them to admin.site.urls, which is part of a built-in application that comes with Django, and contains a lot of functionality and user interfaces, one of them being the log-in user interface.
+
+## Create User
