@@ -1,5 +1,7 @@
 # Python Django Tutorial
 
+* [https://www.w3schools.com/django/index.php](https://www.w3schools.com/django/index.php)
+
 ## Create Virtual Environment
 It is suggested to have a dedicated virtual environment for each Django project, and one way to manage a virtual environment is venv, which is included in Python. The name of the virtual environment is your choice, in this tutorial we will call it myworld. Type the following in the command prompt, remember to navigate to where you want to create your project:
 ```
@@ -152,13 +154,59 @@ python manage.py migrate
 ```
 Now you have a Member table in you database!
 
-## Django Insert Data
+As a side-note: you can view the SQL statement that were executed from the migration above. All you have to do is to run this command, with the migration number:
+```
+python manage.py sqlmigrate members 0001
+```
 
+### Django Models Insert Data
+The Members table created in the previous chapter is empty. We will use the Python interpreter (Python shell) to add some members to it. To open a Python shell, type this command:
+```
+python manage.py shell
+```
+At the bottom, after the three >>> write the following:
+```
+>>> from members.models import Member
+>>> Member.objects.all()
+```
+A QuerySet is a collection of data from a database. Add a record to the table, by executing these two lines:
+```
+>>> member = Member(firstname='Emil', lastname='Refsnes')
+>>> member.save()
+>>> Member.objects.all().values()
+```
+You can add multiple records by making a list of Member objects, and execute .save() on each entry:
+```
+>>> member1 = Member(firstname='Tobias', lastname='Refsnes')
+>>> member2 = Member(firstname='Linus', lastname='Refsnes')
+>>> member3 = Member(firstname='Lene', lastname='Refsnes')
+>>> member4 = Member(firstname='Stale', lastname='Refsnes')
+>>> member5 = Member(firstname='Jane', lastname='Doe')
+>>> members_list = [member1, member2, member3, member4, member5]
+>>> for x in members_list: x.save()
+... 
+>>> Member.objects.all().values()
+```
 
-## Django Update Data
+### Django Models Update Data
+To update records that are already in the database, we first have to get the record we want to update and then change the value:
+```
+>>> from members.models import Member
+>>> x = Member.objects.all()[4]
+>>> x.firstname
+>>> x.firstname = "Stalikken"
+>>> x.save()
+>>> Member.objects.all().values()
+```
 
+### Django Models Delete Data
+To delete a record in a table, start by getting the record you want to delete and then delete it:
+```
+>>> from members.models import Member
+>>> x = Member.objects.all()[5]
+>>> x.firstname
+>>> x.delete()
+>>> Member.objects.all().values()
+```
 
-## Django Delete Data
-
-
-## Django Update Model
+### Django Update Model
