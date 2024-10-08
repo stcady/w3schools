@@ -1123,3 +1123,69 @@ forloop.revcounter0 - The current iteration if you start at the end and count ba
 ```
 
 ## Django Comment
+Comments allows you to have sections of code that should be ignored.
+```html
+<h1>Welcome Everyone</h1>
+{% comment %}
+  <h1>Welcome ladies and gentlemen</h1>
+{% endcomment %}
+```
+You can add a message to your comment, to help you remember why you wrote the comment, or as message to other people reading the code.
+```html
+<h1>Welcome Everyone</h1>
+{% comment "this was the original welcome message" %}
+    <h1>Welcome ladies and gentlemen</h1>
+{% endcomment %}
+```
+You can also use the {# ... #} tags when commenting out code, which can be easier for smaller comments:
+```html
+<h1>Welcome{# Everyone#}</h1>
+```
+Views are written in Python, and Python comments are written with the # character:
+```python
+from django.http import HttpResponse
+from django.template import loader
+
+def testing(request):
+  template = loader.get_template('template.html')
+  #context = {
+  # 'var1': 'John',
+  #}
+  return HttpResponse(template.render())
+```
+
+## Django Include
+The include tag allows you to include a template inside the current template. This is useful when you have a block of content that is the same for many pages.
+```html
+<p>You have reached the bottom of this page, thank you for your time.</p>
+```
+```html
+<h1>Hello</h1>
+
+<p>This page contains a footer in a template.</p>
+
+{% include 'footer.html' %} 
+```
+
+You can send variables into the template by using the with keyword. In the include file, you refer to the variables by using the {{ variablename }} syntax:
+```html
+<div>HOME | {{ me }} | ABOUT | FORUM | {{ sponsor }}</div>
+```
+```html
+<!DOCTYPE html>
+<html>
+<body>
+
+{% include "mymenu.html" with me="TOBIAS" sponsor="W3SCHOOLS" %}
+
+<h1>Welcome</h1>
+
+<p>This is my webpage</p>
+
+</body>
+</html> 
+```
+
+# QuerySets
+
+## QuerySet Introduction
