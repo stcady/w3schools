@@ -548,3 +548,67 @@ Django will look for a file named 404.html in the templates folder, and display 
 ```
 
 ## Add Test View
+When testing different aspects of Django, it can be a good idea to have somewhere to test code without destroying the main project. Start by adding a view called "testing" in the views.py file:
+```python
+from django.http import HttpResponse
+from django.template import loader
+from .models import Member
+
+def members(request):
+  mymembers = Member.objects.all().values()
+  template = loader.get_template('all_members.html')
+  context = {
+    'mymembers': mymembers,
+  }
+  return HttpResponse(template.render(context, request))
+  
+def details(request, id):
+  mymember = Member.objects.get(id=id)
+  template = loader.get_template('details.html')
+  context = {
+    'mymember': mymember,
+  }
+  return HttpResponse(template.render(context, request))
+  
+def main(request):
+  template = loader.get_template('main.html')
+  return HttpResponse(template.render())
+
+def testing(request):
+  template = loader.get_template('template.html')
+  context = {
+    'fruits': ['Apple', 'Banana', 'Cherry'],   
+  }
+  return HttpResponse(template.render(context, request))
+```
+We have to make sure that incoming urls to /testing/ will be redirected to the testing view. This is done in the urls.py file in the members folder:
+```python
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.main, name='main'),
+    path('members/', views.members, name='members'),
+    path('members/details/<int:id>', views.details, name='details'),
+    path('testing/', views.testing, name='testing'),    
+]
+```
+We also need a template where we can play around with HTML and Django code. Create a template called "template.html" in the templates folder. Open the template.html file and insert the following:
+```html
+<!DOCTYPE html>
+<html>
+<body>
+
+{% for x in fruits %}
+  <h1>{{ x }}</h1>
+{% endfor %}
+
+<p>In views.py you can see what the fruits variable looks like.</p>
+
+</body>
+</html>
+```
+If the server is not running, navigate to the /my_tennis_club folder and execute this command in the command prompt:
+```sh
+python manage.py runserver 
+```
