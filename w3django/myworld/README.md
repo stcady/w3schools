@@ -1,4 +1,4 @@
-* [https://www.w3schools.com/django/index.php](https://www.w3schools.com/django/index.php)
+[W3Schools Django Tutorial Page](https://www.w3schools.com/django/index.php)
 
 # Python Django Tutorial
 
@@ -290,3 +290,83 @@ Start the server by navigating to the /my_tennis_club/ folder and execute this c
 python manage.py runserver
 ```
 In the browser window, type 127.0.0.1:8000/members/ in the address bar.
+
+## Add Link to Details
+The next step in our web page will be to add a Details page, where we can list more details about a specific member. Start by creating a new template called details.html:
+```
+<!DOCTYPE html>
+<html>
+
+<body>
+
+<h1>{{ mymember.firstname }} {{ mymember.lastname }}</h1>
+  
+<p>Phone: {{ mymember.phone }}</p>
+<p>Member since: {{ mymember.joined_date }}</p>
+
+<p>Back to <a href="/members">Members</a></p>
+
+</body>
+</html>
+```
+The list in all_members.html should be clickable, and take you to the details page with the ID of the member you clicked on:
+```
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Members</h1>
+  
+<ul>
+  {% for x in mymembers %}
+    <li><a href="details/{{ x.id }}">{{ x.firstname }} {{ x.lastname }}</a></li>
+  {% endfor %}
+</ul>
+
+</body>
+</html>
+```
+Then create a new view in the views.py file, that will deal with incoming requests to the /details/ url:
+```
+from django.http import HttpResponse
+from django.template import loader
+from .models import Member
+
+def members(request):
+  mymembers = Member.objects.all().values()
+  template = loader.get_template('all_members.html')
+  context = {
+    'mymembers': mymembers,
+  }
+  return HttpResponse(template.render(context, request))
+  
+def details(request, id):
+  mymember = Member.objects.get(id=id)
+  template = loader.get_template('details.html')
+  context = {
+    'mymember': mymember,
+  }
+  return HttpResponse(template.render(context, request))
+```
+The details view does the following:
+* Gets the id as an argument.
+* Uses the id to locate the correct record in the Member table.
+* Loads the details.html template.
+* Creates an object containing the member.
+* Sends the object to the template.
+* Outputs the HTML that is rendered by the template.
+
+Now we need to make sure that the /details/ url points to the correct view, with id as a parameter. Open the urls.py file and add the details view to the urlpatterns list:
+```
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('members/', views.members, name='members'),
+    path('members/details/<int:id>', views.details, name='details'),
+]
+```
+If the server is down, you have to start it again with the runserver command:
+```
+python manage.py runserver
+```
