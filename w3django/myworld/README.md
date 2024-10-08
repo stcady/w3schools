@@ -650,3 +650,58 @@ python manage.py runserver
 In the browser window, type 127.0.0.1:8000/admin/ in the address bar. And fill in the form with the correct username and password. Which should result in this user interface. Here you can create, read, update, and delete groups and users, but where is the Members model? The Members model is missing, as it should be, you have to tell Django which models that should be visible in the admin interface.
 
 ## Include Models
+To include the Member model in the admin interface, we have to tell Django that this model should be visible in the admin interface. This is done in a file called admin.py, and is located in your app's folder, which in our case is the members folder. Open it, and it should look like this:
+```python
+from django.contrib import admin
+
+# Register your models here.
+```
+Insert a couple of lines here to make the Member model visible in the admin page:
+```python
+from django.contrib import admin
+from .models import Member
+
+# Register your models here.
+admin.site.register(Member)
+```
+Now go back to the browser and you should see Member in the admin page. Click Members and see the five records we inserted earlier in this tutorial.
+
+In the list we see "Member object (1)", "Member object (2)" etc. which might not be the data you wanted to be displayed in the list. It would be better to display "firstname" and "lastname" instead. This can easily be done by changing some settings in the models.py and/or the admin.py files.
+
+## Set List Display
+When you display a Model as a list, Django displays each record as the string representation of the record object, which in our case is "Member object (1)", "Member object(2)" etc.
+
+To change this to a more reader-friendly format, we have two choices:
+* Change the string representation function, __str__() of the Member Model
+* Set the list_details property of the Member Model
+
+To change the string representation, we have to define the __str__() function of the Member Model in models.py, like this:
+```python
+from django.db import models
+
+class Member(models.Model):
+  firstname = models.CharField(max_length=255)
+  lastname = models.CharField(max_length=255)
+  phone = models.IntegerField(null=True)
+  joined_date = models.DateField(null=True)
+
+  def __str__(self):
+    return f"{self.firstname} {self.lastname}"
+```
+Defining our own __str__() function is not a Django feature, it is how to change the string representation of objects in Python.
+
+We can control the fields to display by specifying them in in a list_display property in the admin.py file. First create a MemberAdmin() class and specify the list_display tuple, like this:
+```python
+from django.contrib import admin
+from .models import Member
+
+# Register your models here.
+
+class MemberAdmin(admin.ModelAdmin):
+  list_display = ("firstname", "lastname", "joined_date",)
+  
+admin.site.register(Member, MemberAdmin)
+```
+Remember to add the MemberAdmin as an argumet in the admin.site.register(Member, MemberAdmin).
+
+## Update Members
