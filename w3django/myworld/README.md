@@ -704,4 +704,7 @@ admin.site.register(Member, MemberAdmin)
 ```
 Remember to add the MemberAdmin as an argumet in the admin.site.register(Member, MemberAdmin).
 
-## Update Members
+## Create, Update, Deleted Members
+Now we are able to create, update, and delete members in our database, and we start by giving them all a date for when they became members.
+
+# Django Syntax
