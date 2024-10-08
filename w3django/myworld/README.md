@@ -210,3 +210,36 @@ To delete a record in a table, start by getting the record you want to delete an
 ```
 
 ### Django Update Model
+To add a field to a table after it is created, open the models.py file, and make your changes:
+```
+from django.db import models
+
+class Member(models.Model):
+  firstname = models.CharField(max_length=255)
+  lastname = models.CharField(max_length=255)
+  phone = models.IntegerField(null=True)
+  joined_date = models.DateField(null=True)
+```
+As you can see, we want to add phone and joined_date to our Member Model. This is a change in the Model's structure, and therefor we have to make a migration to tell Django that it has to update the database:
+```
+python manage.py makemigrations members
+```
+Run the migrate command:
+```
+python manage.py migrate
+```
+We can insert data to the two new fields with the same approach as we did in the Update Data chapter. First we enter the Python Shell:
+```
+python manage.py shell
+```
+At the bottom, after the three >>> write the following (and hit [enter] for each line):
+```
+>>> from members.models import Member
+>>> x = Member.objects.all()[0]
+>>> x.phone = 5551234
+>>> x.joined_date = '2022-01-05'
+>>> x.save()
+>>> Member.objects.all().values()
+```
+
+# Display Data
