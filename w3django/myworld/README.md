@@ -1,6 +1,6 @@
 # Python Django Tutorial
 
-## Virtual Environment
+## Create Virtual Environment
 It is suggested to have a dedicated virtual environment for each Django project, and one way to manage a virtual environment is venv, which is included in Python. The name of the virtual environment is your choice, in this tutorial we will call it myworld. Type the following in the command prompt, remember to navigate to where you want to create your project:
 ```
 python -m venv myworld
@@ -37,7 +37,7 @@ python manage.py runserver
 ```
 Open a new browser window and type 127.0.0.1:8000 in the address bar.
 
-## Create App
+## Django Create App
 An app is a web application that has a specific meaning in your project, like a home page, a contact form, or a members database. In this tutorial we will create an app that allows us to list and register members in a database. But first, let's just create a simple Django app that displays "Hello World!".
 
 I will name my app members. Start by navigating to the selected location where you want to store the app, in my case the my_tennis_club folder, and run the command below.
@@ -128,3 +128,37 @@ python manage.py runserver
 In the browser window, type 127.0.0.1:8000/members/ in the address bar.
 
 ## Django Models
+A Django model is a table in your database. Up until now in this tutorial, output has been static data from Python or HTML templates. Now we will see how Django allows us to work with data, without having to change or upload files in the process. In Django, data is created in objects, called Models, and is actually tables in a database.
+
+To create a model, navigate to the models.py file in the /members/ folder. Open it, and add a Member table by creating a Member class, and describe the table fields in it:
+```
+from django.db import models
+
+class Member(models.Model):
+  firstname = models.CharField(max_length=255)
+  lastname = models.CharField(max_length=255)
+```
+When we created the Django project, we got an empty SQLite database. It was created in the my_tennis_club root folder, and has the filename db.sqlite3. By default, all Models created in the Django project will be created as tables in this database.
+
+Now when we have described a Model in the models.py file, we must run a command to actually create the table in the database. Navigate to the /my_tennis_club/ folder and run this command:
+```
+python manage.py makemigrations members
+```
+Django creates a file describing the changes and stores the file in the /migrations/ folder. Note that Django inserts an id field for your tables, which is an auto increment number (first record gets the value 1, the second record 2 etc.), this is the default behavior of Django, you can override it by describing your own id field.
+
+The table is not created yet, you will have to run one more command, then Django will create and execute an SQL statement, based on the content of the new file in the /migrations/ folder. Run the migrate command:
+```
+python manage.py migrate
+```
+Now you have a Member table in you database!
+
+## Django Insert Data
+
+
+## Django Update Data
+
+
+## Django Delete Data
+
+
+## Django Update Model
