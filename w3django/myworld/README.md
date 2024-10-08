@@ -430,7 +430,121 @@ This is done by including the master template with the {% extends %} tag, and in
 ```
 If the server is down, you have to start it again with the runserver command:
 ```sh
-py manage.py runserver
+python manage.py runserver
 ```
 
 ## Add Main Index Page
+Our project needs a main page. The main page will be the landing page when someone visits the root folder of the project. Now, you get an error when visiting the root folder of your project: 127.0.0.1:8000/. Start by creating a template called main.html:
+```html
+{% extends "master.html" %}
+
+{% block title %}
+  My Tennis Club
+{% endblock %}
+
+
+{% block content %}
+  <h1>My Tennis Club</h1>
+
+  <h3>Members</h3>
+  
+  <p>Check out all our <a href="members/">members</a></p>
+  
+{% endblock %}
+```
+Then create a new view called main, that will deal with incoming requests to root of the project:
+```python
+from django.http import HttpResponse
+from django.template import loader
+from .models import Member
+
+def members(request):
+  mymembers = Member.objects.all().values()
+  template = loader.get_template('all_members.html')
+  context = {
+    'mymembers': mymembers,
+  }
+  return HttpResponse(template.render(context, request))
+  
+def details(request, id):
+  mymember = Member.objects.get(id=id)
+  template = loader.get_template('details.html')
+  context = {
+    'mymember': mymember,
+  }
+  return HttpResponse(template.render(context, request))
+  
+def main(request):
+  template = loader.get_template('main.html')
+  return HttpResponse(template.render())
+```
+The main view does the following:
+* Loads the main.html template.
+* Outputs the HTML that is rendered by the template.
+
+Now we need to make sure that the root url points to the correct view. Open the urls.py file and add the main view to the urlpatterns list:
+```python
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.main, name='main'),
+    path('members/', views.members, name='members'),
+    path('members/details/<int:id>', views.details, name='details'),
+]
+```
+The members page is missing a link back to the main page, so let us add that in the all_members.html template, in the content block:
+```html
+{% extends "master.html" %}
+
+{% block title %}
+  My Tennis Club - List of all members
+{% endblock %}
+
+
+{% block content %}
+
+  <p><a href="/">HOME</a></p>
+
+  <h1>Members</h1>
+  
+  <ul>
+    {% for x in mymembers %}
+      <li><a href="details/{{ x.id }}">{{ x.firstname }} {{ x.lastname }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}
+```
+If the server is down, you have to start it again with the runserver command:
+```sh
+python manage.py runserver
+```
+
+## Django 404 Template
+If you try to access a page that does not exist (a 404 error), Django directs you to a built-in view that handles 404 errors. You will learn how to customize this 404 view later in this chapter, but first, just try to request a page that does not exist. In the browser window, type 127.0.0.1:8000/masfdfg/ in the address bar.
+
+You will get one of two results. If you get the dubug windown then then DEBUG is set to True in your settings, and you must set it to False to get directed to the 404 template. This is done in the settings.py file, which is located in the project folder, in our case the my_tennis_club folder, where you also have to specify the host name from where your project runs from:
+```python
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = False
+
+ALLOWED_HOSTS = ['*']
+```
+Note. When DEBUG = False, Django requires you to specify the hosts you will allow this Django project to run from. In production, this should be replaced with a proper domain name: ALLOWED_HOSTS = ['yourdomain.com'].
+
+Django will look for a file named 404.html in the templates folder, and display it when there is a 404 error. If no such file exists, Django shows the "Not Found" that you saw in the example above. To customize this message, all you have to do is to create a file in the templates folder and name it 404.html, and fill it with whatever you want:
+```html
+<!DOCTYPE html>
+<html>
+<title>Wrong address</title>
+<body>
+
+<h1>Ooops!</h1>
+
+<h2>I cannot find the file you requested!</h2>
+
+</body>
+</html>
+```
+
+## Add Test View
