@@ -4,37 +4,37 @@
 
 ## Create Virtual Environment
 It is suggested to have a dedicated virtual environment for each Django project, and one way to manage a virtual environment is venv, which is included in Python. The name of the virtual environment is your choice, in this tutorial we will call it myworld. Type the following in the command prompt, remember to navigate to where you want to create your project:
-```
+```sh
 python -m venv myworld
 ```
 This will set up a virtual environment, and create a folder named "myworld" with subfolders and files. Then you have to activate the environment, by typing this command:
-```
+```sh
 source myworld/bin/activate
 ```
 Note: You must activate the virtual environment every time you open the command prompt to work on your project. It will look something like:
-```
+```sh
 (myworld) ... $
 ```
 
 ## Install Django
 Django is installed using pip, with this command:
-```
+```sh
 (myworld) ... $ python -m pip install Django
 ```
 You can check if Django is installed by asking for its version number like this:
-```
+```sh
 django-admin --version
 ```
 
 ## Django Create Project
 Once you have come up with a suitable name for your Django project, like mine: my_tennis_club, navigate to where in the file system you want to store the code (in the virtual environment), I will navigate to the myworld folder, and run this command in the command prompt:
-```
+```sh
 django-admin startproject my_tennis_club
 ```
 Django creates a my_tennis_club folder on my computer. These are all files and folders with a specific meaning, you will learn about some of them later in this tutorial, but for now, it is more important to know that this is the location of your project, and that you can start building applications in it.
 
 Now that you have a Django project, you can run it, and see what it looks like in a browser. Navigate to the /my_tennis_club folder and execute this command in the command prompt:
-```
+```sh
 python manage.py runserver
 ```
 Open a new browser window and type 127.0.0.1:8000 in the address bar.
@@ -43,14 +43,14 @@ Open a new browser window and type 127.0.0.1:8000 in the address bar.
 An app is a web application that has a specific meaning in your project, like a home page, a contact form, or a members database. In this tutorial we will create an app that allows us to list and register members in a database. But first, let's just create a simple Django app that displays "Hello World!".
 
 I will name my app members. Start by navigating to the selected location where you want to store the app, in my case the my_tennis_club folder, and run the command below.
-```
+```sh
 python manage.py startapp members
 ```
 Django creates a folder named members in my project. These are all files and folders with a specific meaning. You will learn about most of them later in this tutorial.
 
 ## Django Views
 Django views are Python functions that take http requests and return http response, like HTML documents. A web page that uses Django is full of views with different tasks and missions. Views are usually put in a file called views.py located on your app's folder. Find it and open it, and replace the content with this:
-```
+```python
 from django.shortcuts import render
 from django.http import HttpResponse
 
@@ -61,7 +61,7 @@ This is a simple example on how to send a response back to the browser. But how 
 
 ## Django URLs
 Create a file named urls.py in the same folder as the views.py file, and type this code in it:
-```
+```python
 from django.urls import path
 from . import views
 
@@ -70,7 +70,7 @@ urlpatterns = [
 ]
 ```
 The urls.py file you just created is specific for the members application. We have to do some routing in the root directory my_tennis_club as well. This may seem complicated, but for now, just follow the instructions below. There is a file called urls.py on the my_tennis_club folder, open that file and add the include module in the import statement, and also add a path() function in the urlpatterns[] list, with arguments that will route users that comes in via 127.0.0.1:8000/. Then your file will look like this:
-```
+```python
 from django.contrib import admin
 from django.urls import include, path
 
@@ -80,14 +80,14 @@ urlpatterns = [
 ]
 ```
 If the server is not running, navigate to the /my_tennis_club folder and execute this command in the command prompt:
-```
+```sh
 python manage.py runserver
 ```
 In the browser window, type 127.0.0.1:8000/members/ in the address bar.
 
 ## Django Templates
 In the Django Intro page, we learned that the result should be in HTML, and it should be created in a template, so let's do that. Create a templates folder inside the members folder, and create a HTML file named myfirst.html. Open the HTML file and insert the following:
-```
+```html
 <!DOCTYPE html>
 <html>
 <body>
@@ -99,7 +99,7 @@ In the Django Intro page, we learned that the result should be in HTML, and it s
 </html>
 ```
 Open the views.py file and replace the members view with this:
-```
+```python
 from django.http import HttpResponse
 from django.template import loader
 
@@ -108,7 +108,7 @@ def members(request):
   return HttpResponse(template.render())
 ```
 To be able to work with more complicated stuff than "Hello World!", We have to tell Django that a new app is created. This is done in the settings.py file in the my_tennis_club folder. Look up the INSTALLED_APPS[] list and add the members app like this:
-```
+```python
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -120,11 +120,11 @@ INSTALLED_APPS = [
 ]
 ```
 Then run this command:
-```
+```sh
 python manage.py migrate
 ```
 Start the server by navigating to the /my_tennis_club folder and execute this command:
-```
+```sh
 python manage.py runserver
 ```
 In the browser window, type 127.0.0.1:8000/members/ in the address bar.
@@ -133,7 +133,7 @@ In the browser window, type 127.0.0.1:8000/members/ in the address bar.
 A Django model is a table in your database. Up until now in this tutorial, output has been static data from Python or HTML templates. Now we will see how Django allows us to work with data, without having to change or upload files in the process. In Django, data is created in objects, called Models, and is actually tables in a database.
 
 To create a model, navigate to the models.py file in the /members/ folder. Open it, and add a Member table by creating a Member class, and describe the table fields in it:
-```
+```python
 from django.db import models
 
 class Member(models.Model):
@@ -143,40 +143,40 @@ class Member(models.Model):
 When we created the Django project, we got an empty SQLite database. It was created in the my_tennis_club root folder, and has the filename db.sqlite3. By default, all Models created in the Django project will be created as tables in this database.
 
 Now when we have described a Model in the models.py file, we must run a command to actually create the table in the database. Navigate to the /my_tennis_club/ folder and run this command:
-```
+```sh
 python manage.py makemigrations members
 ```
 Django creates a file describing the changes and stores the file in the /migrations/ folder. Note that Django inserts an id field for your tables, which is an auto increment number (first record gets the value 1, the second record 2 etc.), this is the default behavior of Django, you can override it by describing your own id field.
 
 The table is not created yet, you will have to run one more command, then Django will create and execute an SQL statement, based on the content of the new file in the /migrations/ folder. Run the migrate command:
-```
+```sh
 python manage.py migrate
 ```
 Now you have a Member table in you database!
 
 As a side-note: you can view the SQL statement that were executed from the migration above. All you have to do is to run this command, with the migration number:
-```
+```sh
 python manage.py sqlmigrate members 0001
 ```
 
 ### Django Models Insert Data
 The Members table created in the previous chapter is empty. We will use the Python interpreter (Python shell) to add some members to it. To open a Python shell, type this command:
-```
+```sh
 python manage.py shell
 ```
 At the bottom, after the three >>> write the following:
-```
+```python
 >>> from members.models import Member
 >>> Member.objects.all()
 ```
 A QuerySet is a collection of data from a database. Add a record to the table, by executing these two lines:
-```
+```python
 >>> member = Member(firstname='Emil', lastname='Refsnes')
 >>> member.save()
 >>> Member.objects.all().values()
 ```
 You can add multiple records by making a list of Member objects, and execute .save() on each entry:
-```
+```python
 >>> member1 = Member(firstname='Tobias', lastname='Refsnes')
 >>> member2 = Member(firstname='Linus', lastname='Refsnes')
 >>> member3 = Member(firstname='Lene', lastname='Refsnes')
@@ -190,7 +190,7 @@ You can add multiple records by making a list of Member objects, and execute .sa
 
 ### Django Models Update Data
 To update records that are already in the database, we first have to get the record we want to update and then change the value:
-```
+```python
 >>> from members.models import Member
 >>> x = Member.objects.all()[4]
 >>> x.firstname
@@ -201,7 +201,7 @@ To update records that are already in the database, we first have to get the rec
 
 ### Django Models Delete Data
 To delete a record in a table, start by getting the record you want to delete and then delete it:
-```
+```python
 >>> from members.models import Member
 >>> x = Member.objects.all()[5]
 >>> x.firstname
@@ -211,7 +211,7 @@ To delete a record in a table, start by getting the record you want to delete an
 
 ### Django Update Model
 To add a field to a table after it is created, open the models.py file, and make your changes:
-```
+```python
 from django.db import models
 
 class Member(models.Model):
@@ -221,19 +221,19 @@ class Member(models.Model):
   joined_date = models.DateField(null=True)
 ```
 As you can see, we want to add phone and joined_date to our Member Model. This is a change in the Model's structure, and therefor we have to make a migration to tell Django that it has to update the database:
-```
+```sh
 python manage.py makemigrations members
 ```
 Run the migrate command:
-```
+```sh
 python manage.py migrate
 ```
 We can insert data to the two new fields with the same approach as we did in the Update Data chapter. First we enter the Python Shell:
-```
+```sh
 python manage.py shell
 ```
 At the bottom, after the three >>> write the following (and hit [enter] for each line):
-```
+```python
 >>> from members.models import Member
 >>> x = Member.objects.all()[0]
 >>> x.phone = 5551234
@@ -246,7 +246,7 @@ At the bottom, after the three >>> write the following (and hit [enter] for each
 
 ## Prepare Template and View
 After creating Models, with the fields and data we want in them, it is time to display the data in a web page. Start by creating an HTML file named all_members.html and place it in the /templates/ folder:
-```
+```html
 <!DOCTYPE html>
 <html>
 <body>
@@ -265,7 +265,7 @@ After creating Models, with the fields and data we want in them, it is time to d
 Do you see the {% %} brackets inside the HTML document? They are Django Tags, telling Django to perform some programming logic inside these brackets.
 
 Next we need to make the model data available in the template. This is done in the view. In the view we have to import the Member model, and send it to the template like this:
-```
+```python
 from django.http import HttpResponse
 from django.template import loader
 from .models import Member
@@ -286,14 +286,14 @@ The members view does the following:
 * Outputs the HTML that is rendered by the template.
 
 Start the server by navigating to the /my_tennis_club/ folder and execute this command:
-```
+```sh
 python manage.py runserver
 ```
 In the browser window, type 127.0.0.1:8000/members/ in the address bar.
 
 ## Add Link to Details
 The next step in our web page will be to add a Details page, where we can list more details about a specific member. Start by creating a new template called details.html:
-```
+```html
 <!DOCTYPE html>
 <html>
 
@@ -310,7 +310,7 @@ The next step in our web page will be to add a Details page, where we can list m
 </html>
 ```
 The list in all_members.html should be clickable, and take you to the details page with the ID of the member you clicked on:
-```
+```html
 <!DOCTYPE html>
 <html>
 <body>
@@ -327,7 +327,7 @@ The list in all_members.html should be clickable, and take you to the details pa
 </html>
 ```
 Then create a new view in the views.py file, that will deal with incoming requests to the /details/ url:
-```
+```python
 from django.http import HttpResponse
 from django.template import loader
 from .models import Member
@@ -357,7 +357,7 @@ The details view does the following:
 * Outputs the HTML that is rendered by the template.
 
 Now we need to make sure that the /details/ url points to the correct view, with id as a parameter. Open the urls.py file and add the details view to the urlpatterns list:
-```
+```python
 from django.urls import path
 from . import views
 
@@ -367,6 +367,8 @@ urlpatterns = [
 ]
 ```
 If the server is down, you have to start it again with the runserver command:
-```
+```sh
 python manage.py runserver
 ```
+
+## Add Master Template
