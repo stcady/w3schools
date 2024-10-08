@@ -618,7 +618,7 @@ python manage.py runserver
 ## Django Admin
 Django Admin is a really great tool in Django, it is actually a CRUD* user interface of all your models!
 
-To enter the admin user interface, start the server by navigating to the /myworld folder and execute this command:
+To enter the admin user interface, start the server by navigating to the /my_tennis_club folder and execute this command:
 ```sh
 python manage.py runserver
 ```
@@ -637,3 +637,16 @@ urlpatterns = [
 The urlpatterns[] list takes requests going to admin/ and sends them to admin.site.urls, which is part of a built-in application that comes with Django, and contains a lot of functionality and user interfaces, one of them being the log-in user interface.
 
 ## Create User
+To be able to log into the admin application, we need to create a user. This is done by typing this command in the command view:
+```sh
+python manage.py createsuperuser
+```
+Here you must enter: username, e-mail address, (you can just pick a fake e-mail address), and password.
+
+Now start the server again:
+```sh
+python manage.py runserver
+```
+In the browser window, type 127.0.0.1:8000/admin/ in the address bar. And fill in the form with the correct username and password. Which should result in this user interface. Here you can create, read, update, and delete groups and users, but where is the Members model? The Members model is missing, as it should be, you have to tell Django which models that should be visible in the admin interface.
+
+## Include Models
