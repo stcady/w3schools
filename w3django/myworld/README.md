@@ -708,3 +708,96 @@ Remember to add the MemberAdmin as an argumet in the admin.site.register(Member,
 Now we are able to create, update, and delete members in our database, and we start by giving them all a date for when they became members.
 
 # Django Syntax
+
+## Django Variables
+In Django templates, you can render variables by putting them inside {{ }} brackets:
+```html
+<h1>Hello {{ firstname }}, how are you?</h1>
+```
+The variable firstname in the example above was sent to the template via a view:
+```python
+from django.http import HttpResponse
+from django.template import loader
+
+def testing(request):
+  template = loader.get_template('template.html')
+  context = {
+    'firstname': 'Linus',
+  }
+  return HttpResponse(template.render(context, request))
+```
+As you can see in the view above, we create an object named context and fill it with data, and send it as the first parameter in the template.render() function.
+
+You can also create variables directly in the template, by using the {% with %} template tag. The variable is available until the {% endwith %} tag appears:
+```html
+{% with firstname="Tobias" %}
+<h1>Hello {{ firstname }}, how are you?</h1>
+{% endwith %}
+```
+
+The example above showed a easy approach on how to create and use variables in a template. Normally, most of the external data you want to use in a template, comes from a model. To get data from the Member model, we will have to import it in the views.py file, and extract data from it in the view:
+```python
+from django.http import HttpResponse, HttpResponseRedirect
+from django.template import loader
+from .models import Member
+
+def testing(request):
+  mymembers = Member.objects.all().values()
+  template = loader.get_template('template.html')
+  context = {
+    'mymembers': mymembers,
+  }
+  return HttpResponse(template.render(context, request))
+```
+Now we can use the data in the template:
+```html
+<ul>
+{% for x in mymembers %}
+  <li>{{ x.firstname }}</li>
+{% endfor %}
+</ul>
+```
+We use the Django template tag {% for %} to loop through the members.
+
+## Django Tags
+In Django templates, you can perform programming logic like executing if statements and for loops. These keywords, if and for, are called "template tags" in Django. To execute template tags, we surround them in {% %} brackets.
+```html
+{% if greeting == 1 %}
+  <h1>Hello</h1>
+{% else %}
+  <h1>Bye</h1>
+{% endif %}
+```
+The template tags are a way of telling Django that here comes something else than plain HTML. The template tags allows us to do some programming on the server before sending HTML to the client.
+```html
+<ul>
+  {% for x in mymembers %}
+    <li>{{ x.firstname }}</li>
+  {% endfor %}
+</ul>
+```
+A list of all template tags:
+* autoescape - Specifies if autoescape mode is on or off 
+* block	- Specifies a block section
+* comment	- Specifies a comment section
+* csrf_token - Protects forms from Cross Site Request Forgeries
+* cycle - Specifies content to use in each cycle of a loop
+* debug - Specifies debugging information
+* extends - Specifies a parent template
+* filter - Filters content before returning it
+* firstof - Returns the first not empty variable
+* for - Specifies a for loop
+* if - Specifies a if statement
+* ifchanged - Used in for loops. Outputs a block only if a value has changed since the last iteration
+* include - Specifies included content/template
+* load - Loads template tags from another library
+* lorem - Outputs random text
+* now - Outputs the current date/time
+* regroup - Sorts an object by a group
+* resetcycle - Used in cycles. Resets the cycle
+* spaceless - Removes whitespace between HTML tags
+* templatetag - Outputs a specified template tag
+* url	- eturns the absolute URL part of a URL
+* verbatim - Specifies contents that should not be rendered by the template engine
+* widthratio - Calculates a width value based on the ratio between a given value and a max value
+* with - Specifies a variable to use in the block
