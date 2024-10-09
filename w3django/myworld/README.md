@@ -1189,3 +1189,190 @@ You can send variables into the template by using the with keyword. In the inclu
 # QuerySets
 
 ## QuerySet Introduction
+A QuerySet is a collection of data from a database and is built up as a list of objects. QuerySets makes it easier to get the data you actually need, by allowing you to filter and order the data at an early stage.
+
+In views.py, we have a view for testing called testing where we will test different queries. In the example below we use the .all() method to get all the records and fields of the Member model:
+```python
+from django.http import HttpResponse
+from django.template import loader
+from .models import Member
+
+def testing(request):
+  mydata = Member.objects.all()
+  template = loader.get_template('template.html')
+  context = {
+    'mymembers': mydata,
+  }
+  return HttpResponse(template.render(context, request))
+```
+The object is placed in a variable called mydata, and is sent to the template via the context object as mymembers, and looks like this:
+
+```sh
+<QuerySet [
+  <Member: Member object (1)>,
+  <Member: Member object (2)>,
+  <Member: Member object (3)>,
+  <Member: Member object (4)>,
+  <Member: Member object (5)>
+]>
+```
+As you can see, our Member model contains 5 records, and are listed inside the QuerySet as 5 objects. In the template you can use the mymembers object to generate content:
+```html
+<table border='1'>
+  <tr>
+    <th>ID</th>
+    <th>Firstname</th>
+    <th>Lastname</th>
+  </tr>
+  {% for x in mymembers %}
+    <tr>
+      <td>{{ x.id }}</td>
+        <td>{{ x.firstname }}</td>
+      <td>{{ x.lastname }}</td>
+    </tr>
+  {% endfor %}
+</table>
+```
+
+## QuerySet Get
+There are different methods to get data from a model into a QuerySet.
+
+The values() method allows you to return each object as a Python dictionary, with the names and values as key/value pairs:
+```python
+from django.http import HttpResponse
+from django.template import loader
+from .models import Member
+
+def testing(request):
+  mydata = Member.objects.all().values()
+  template = loader.get_template('template.html')
+  context = {
+    'mymembers': mydata,
+  }
+  return HttpResponse(template.render(context, request))
+```
+The values_list() method allows you to return only the columns that you specify.
+```python
+from django.http import HttpResponse
+from django.template import loader
+from .models import Member
+
+def testing(request):
+  mydata = Member.objects.all()
+  template = loader.get_template('template.html')
+  context = {
+    'mymembers': mydata,
+  }
+  return HttpResponse(template.render(context, request))
+```
+Return only the records where firstname is 'Emil'
+```python
+from django.http import HttpResponse
+from django.template import loader
+from .models import Member
+
+def testing(request):
+  mydata = Member.objects.filter(firstname='Emil').values()
+  template = loader.get_template('template.html')
+  context = {
+    'mymembers': mydata,
+  }
+  return HttpResponse(template.render(context, request))
+```
+
+## QuerySet Filter
+The filter() method is used to filter your search, and allows you to return only the rows that matches the search term. As we learned in the previous chapter, we can filter on field names like this:
+```python
+mydata = Member.objects.filter(firstname='Emil').values()
+```
+In SQL, the above statement would be written like this:
+```sql
+SELECT * FROM members WHERE firstname = 'Emil';
+```
+The filter() method takes the arguments as **kwargs (keyword arguments), so you can filter on more than one field by separating them by a comma.
+```python
+mydata = Member.objects.filter(lastname='Refsnes', id=2).values()
+```
+In SQL, the above statement would be written like this:
+```sql
+SELECT * FROM members WHERE lastname = 'Refsnes' AND id = 2;
+```
+To return records where firstname is Emil or firstname is Tobias (meaning: returning records that matches either query, not necessarily both) is not as easy as the AND example above. We can use multiple filter() methods, separated by a pipe | character. The results will merge into one model.
+```python
+mydata = Member.objects.filter(firstname='Emil').values() | Member.objects.filter(firstname='Tobias').values()
+```
+Another common method is to import and use Q expressions:
+```python
+mydata = Member.objects.filter(Q(firstname='Emil') | Q(firstname='Tobias')).values()
+```
+In SQL, the above statement would be written like this:
+```sql
+SELECT * FROM members WHERE firstname = 'Emil' OR firstname = 'Tobias';
+```
+Django has its own way of specifying SQL statements and WHERE clauses. To make specific where clauses in Django, use "Field lookups". Field lookups are keywords that represents specific SQL keywords. All Field lookup keywords must be specified with the fieldname, followed by two(!) underscore characters, and the keyword. In our Member model, the statement would be written like this:
+```python
+mydata = Member.objects.filter(firstname__startswith='L').values()
+```
+A list of all field look up keywords:
+* contains	Contains the phrase
+* icontains	Same as contains, but case-insensitive
+* date	Matches a date
+* day	Matches a date (day of month, 1-31) (for dates)
+* endswith	Ends with
+* iendswith	Same as endswidth, but case-insensitive
+* exact	An exact match
+* iexact	Same as exact, but case-insensitive
+* in	Matches one of the values
+* isnull	Matches NULL values
+* gt	Greater than
+* gte	Greater than, or equal to
+* hour	Matches an hour (for datetimes)
+* lt	Less than
+* lte	Less than, or equal to
+* minute	Matches a minute (for datetimes)
+* month	Matches a month (for dates)
+* quarter	Matches a quarter of the year (1-4) (for dates)
+* range	Match between
+* regex	Matches a regular expression
+* iregex	Same as regex, but case-insensitive
+* second	Matches a second (for datetimes)
+* startswith	Starts with
+* istartswith	Same as startswith, but case-insensitive
+* time	Matches a time (for datetimes)
+* week	Matches a week number (1-53) (for dates)
+* week_day	Matches a day of week (1-7) 1 is sunday
+* iso_week_day	Matches a ISO 8601 day of week (1-7) 1 is monday
+* year	Matches a year (for dates)
+* iso_year	Matches an ISO 8601 year (for dates)
+
+## QuerySet Order By
+To sort QuerySets, Django uses the order_by() method. Order the result alphabetically by firstname:
+```python
+mydata = Member.objects.all().order_by('firstname').values()
+```
+In SQL, the above statement would be written like this:
+```sql
+SELECT * FROM members ORDER BY firstname;
+```
+
+By default, the result is sorted ascending (the lowest value first), to change the direction to descending (the highest value first), use the minus sign (NOT), - in front of the field name:
+```python
+mydata = Member.objects.all().order_by('-firstname').values()
+```
+In SQL, the above statement would be written like this:
+```sql
+SELECT * FROM members ORDER BY firstname DESC;
+```
+
+To order by more than one field, separate the fieldnames with a comma in the order_by() method. Order the result first by lastname ascending, then descending on id:
+```python
+mydata = Member.objects.all().order_by('lastname', '-id').values()
+```
+In SQL, the above statement would be written like this:
+```sql
+SELECT * FROM members ORDER BY lastname ASC, id DESC;
+```
+
+# Static Files
+
+## Add Static Files
