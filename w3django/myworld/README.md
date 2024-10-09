@@ -1446,5 +1446,185 @@ Why so many files? Well this is because of the admin user interface, that comes 
 
 Now you have collected the static files of your project, and if you have installed WhiteNoise, the example from the Add Static Files chapter will finally work. Start the server and see the result:
 ```sh
-py manage.py runserver
+python manage.py runserver
+```
+
+## Add Global Static Files
+We have learned how to add a static file in the application's static folder, and how to use it in the application. But what if other applications in your project wants to use the file? Then we have to create a folder on the root directory and put the file(s) there. It is not enough to create a static folder in the root directory, and Django will fix the rest. We have to tell Django where to look for these static files. Start by creating a folder on the project's root level, this folder can be called whatever you like, I will call it mystaticfiles in this tutorial. Add a CSS file in the mystaticfiles folder, the name is your choice, we will call it myglobal.css in this example. Open the CSS file and insert the following:
+```css
+body {
+  color: violet;
+}
+```
+You will have to tell Django to also look for static files in the mystaticfiles folder in the root directory, this is done in the settings.py file:
+```python
+STATIC_ROOT = BASE_DIR / 'productionfiles'
+
+STATIC_URL = 'static/'
+
+#Add this in your settings.py file:
+STATICFILES_DIRS = [
+    BASE_DIR / 'mystaticfiles'
+]
+```
+In the STATICFILES_DIRS list, you can list all the directories where Django should look for static files. The BASE_DIR keyword represents the root directory of the project, and together with the / "mystaticfiles", it means the mystaticfiles folder in the root directory. If you have files with the same name, Django will use the first occurrence of the file. The search starts in the directories listed in STATICFILES_DIRS, using the order you have provided. Then, if the file is not found, the search continues in the static folder of each application.
+
+Now you have a global CSS file for the entire project, which can be accessed from all your applications. To use it in a template, use the same syntax as you did for the myfirst.css file. Begin the template with the following:
+```html
+{% load static %}
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="{% static 'myglobal.css' %}">
+<body>
+
+{% for x in fruits %}
+  <h1>{{ x }}</h1>
+{% endfor %}
+
+</body>
+</html>
+```
+
+Run the collectstatic command to collect the new static file:
+```sh
+python manage.py collectstatic
+```
+
+## Add Styles to the Project
+We want to add a stylesheet to this project, and put it in the mystaticfiles folder. The name of the CSS file is your choice, we call it mystyles.css in this project. Open the CSS file and insert the following:
+```css
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap');
+body {
+  margin:0;
+  font: 600 18px 'Source Sans Pro', sans-serif;
+  letter-spacing: 0.64px;
+  color: #585d74;
+}
+.topnav {
+  background-color:#375BDC;
+  color:#ffffff;
+  padding:10px;
+}
+.topnav a:link, .topnav a:visited {
+  text-decoration: none;
+  color: #ffffff; 
+}
+.topnav a:hover, .topnav a:active {
+  text-decoration: underline;
+}
+.mycard {
+  background-color: #f1f1f1;
+  background-image: linear-gradient(to bottom, #375BDC, #4D70EF); 
+  background-size: 100% 120px;
+  background-repeat: no-repeat;
+  margin: 40px auto;
+  width: 350px;
+  border-radius: 5px;
+  box-shadow: 0 5px 7px -1px rgba(51, 51, 51, 0.23); 
+  padding: 20px;
+}
+.mycard h1 {
+  text-align: center;
+  color:#ffffff;
+  margin:20px 0 60px 0;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+li {
+  background-color: #ffffff;
+  background-image: linear-gradient(to right, #375BDC, #4D70EF); 
+  background-size: 50px 60px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  transition: transform .25s;
+  border-radius: 5px;
+  box-shadow: 0 5px 7px -1px rgba(51, 51, 51, 0.23);
+  padding: 15px;
+  padding-left: 70px;
+  margin-top: 5px;
+}
+li:hover {
+  transform: scale(1.1);
+}
+a:link, a:visited {
+  color: #375BDC; 
+}
+.main, .main h1 {
+  text-align:center;
+  color:#375BDC;
+}
+```
+Now you have a css file, the next step will be to include this file in the master template. Open the master template file and add the following:
+```html
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'mystyles.css' %}">  
+</head>
+<body>
+
+{% block content %}
+{% endblock %}
+
+</body>
+</html>
+```
+In all_members.html we want to make som changes in the HTML code. The members are put in a div element, and the links become list items with onclick attributes. We also want to remove the navigation, because that is now a part of the master template.
+```html
+{% extends "master.html" %}
+
+{% block title %}
+  My Tennis Club - List of all members
+{% endblock %}
+
+
+{% block content %}
+  <div class="mycard">
+    <h1>Members</h1>
+    <ul>
+      {% for x in mymembers %}
+        <li onclick="window.location = 'details/{{ x.id }}'">{{ x.firstname }} {{ x.lastname }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}
+```
+In details.html we will put the member details in a div element, and remove the link back to members, because that is now a part of the navigation in the master template.
+```html
+{% extends "master.html" %}
+
+{% block title %}
+  Details about {{ mymember.firstname }} {{ mymember.lastname }}
+{% endblock %}
+
+{% block content %}
+  <div class="mycard">
+    <h1>{{ mymember.firstname }} {{ mymember.lastname }}</h1>
+    <p>Phone {{ mymember.phone }}</p>
+    <p>Member since: {{ mymember.joined_date }}</p>
+  </div>
+{% endblock %}  
+```
+In the main.html template, we will put some of the HTML code into a div element:
+```html
+{% extends "master.html" %}
+
+{% block title %}
+  My Tennis Club
+{% endblock %}
+
+{% block content %}
+  <div class="main">
+    <h1>My Tennis Club</h1>
+
+    <h3>Members</h3>
+  
+    <p>Check out all our <a href="members/">members</a></p>
+  </div>
+{% endblock %}
 ```

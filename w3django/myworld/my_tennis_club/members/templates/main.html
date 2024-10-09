@@ -4,12 +4,22 @@
   My Tennis Club
 {% endblock %}
 
-
 {% block content %}
-  <h1>My Tennis Club</h1>
+  <div class="main">
+    <h1>My Tennis Club</h1>
 
-  <h3>Members</h3>
+    <h3>Members</h3>
   
-  <p>Check out all our <a href="members/">members</a></p>
-  
+    <p>Check out all our <a href="members/">members</a></p>
+  </div>
 {% endblock %}
+
+Since we did some changes in the static mystyles.css file, we have to run the collectstatic command to make the changes take effect:
+```sh
+python manage.py collectstatic
+```
+Now, if you run the project:
+```sh
+python manage.py runserver
+```
+You can see what the result should look like.
