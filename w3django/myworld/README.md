@@ -1258,7 +1258,7 @@ from django.template import loader
 from .models import Member
 
 def testing(request):
-  mydata = Member.objects.all()
+  mydata = Member.objects.values_list('firstname')
   template = loader.get_template('template.html')
   context = {
     'mymembers': mydata,
@@ -1628,3 +1628,29 @@ In the main.html template, we will put some of the HTML code into a div element:
   </div>
 {% endblock %}
 ```
+
+# Postgre SQL
+
+## Introduction to Postgre SQL
+
+## Create AWS Account
+
+## Create Database in RDS
+
+## Connect to Database
+
+## Add Members
+
+# Deploy Django
+
+## Elastic Beanstalk (EB)
+
+## Create requirements.txt
+
+## Create django.config
+
+## Create .zip File
+
+## Deploy with EB
+
+## Update Project
