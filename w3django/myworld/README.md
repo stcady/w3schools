@@ -1376,3 +1376,75 @@ SELECT * FROM members ORDER BY lastname ASC, id DESC;
 # Static Files
 
 ## Add Static Files
+When building web applications, you probably want to add some static files like images or css files. Start by creating a folder named static in your project, the same place where you created the templates folder. The name of the folder has to be static.
+
+Add a CSS file in the static folder, the name is your choice, we will call it myfirst.css in this example. Open the CSS file and insert the following:
+```css
+body {
+  background-color: lightblue;
+  font-family: verdana;
+}
+```
+Now you have a CSS file, with some CSS styling. The next step will be to include this file in a HTML template: Open the HTML file and add the following:
+```html
+{% load static %}
+<link rel="stylesheet" href="{% static 'myfirst.css' %}">
+```
+```html
+{% load static %}
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="{% static 'myfirst.css' %}">
+<body>
+
+{% for x in fruits %}
+  <h1>{{ x }}</h1>
+{% endfor %}
+
+</body>
+</html>
+```
+
+Just testing? If you just want to play around, and not going to deploy your work, you can set DEBUG = True in the settings.py file, and the example above will work. Plan to deploy? If you plan to deploy your work, you should set DEBUG = False in the settings.py file. The example above will fail, because Django has no built-in solution for serving static files, but there are other ways to serve static files, you will learn how in the next chapter. When using DEBUG = False you have to specify which host name(s) are allowed to host your work. You could choose '127.0.0.1' or 'localhost' which both represents the address of your local machine. We choose '*', which means any address are allowed to host this site. This should be change into a real domain name when you deploy your project to a public server.
+
+## Installing WhiteNoise
+Django does not have a built-in solution for serving static files, at least not in production when DEBUG has to be False. We have to use a third-party solution to accomplish this. In this Tutorial we will use WhiteNoise, which is a Python library, built for serving static files.
+
+To install WhiteNoise in your virtual environment, type the command below:
+```sh
+pip install whitenoise
+```
+To make Django aware of you wanting to run WhitNoise, you have to specify it in the MIDDLEWARE list in settings.py file:
+```python
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+].
+```
+There is one more action you have to perform before you can serve the static file from the example in the previous chapter. You have to collect all static files and put them into one specified folder. You will learn how in the next chapter.
+
+## Collect Static Files
+Static files in your project, like stylesheets, JavaScripts, and images, are not handled automatically by Django when DEBUG = False. When DEBUG = True, this worked fine, all we had to do was to put them in the static folder of the application. When DEBUG = False, static files have to be collected and put in a specified folder before we can use it.
+
+To collect all necessary static files for your project, start by specifying a STATIC_ROOT property in the settings.py file. This specifies a folder where you want to collect your static files. You can call the folder whatever you like, we will call it productionfiles:
+```python
+STATIC_ROOT = BASE_DIR / 'productionfiles'
+
+STATIC_URL = 'static/'
+```
+You could manually create this folder and collect and put all static files of your project into this folder, but Django has a command that do this for you:
+```sh
+python manage.py collectstatic
+```
+Why so many files? Well this is because of the admin user interface, that comes built-in with Django. We want to keep this feature in production, and it comes with a whole bunch of files including stylesheets, fonts, images, and JavaScripts.
+
+Now you have collected the static files of your project, and if you have installed WhiteNoise, the example from the Add Static Files chapter will finally work. Start the server and see the result:
+```sh
+py manage.py runserver
+```
