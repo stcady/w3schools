@@ -3,7 +3,7 @@
 ### General Homepage
 * [Homepage](https://pathfinder.w3schools.com/)
 
-### Python & Python Core Libraries
+### Python & Core Python Libraries
 * [Python - Certified](https://www.w3schools.com/python/default.asp)
 * [https://www.w3schools.com/python/numpy/default.asp](https://www.w3schools.com/python/numpy/default.asp)
 * [https://www.w3schools.com/python/pandas/default.asp](https://www.w3schools.com/python/pandas/default.asp)
