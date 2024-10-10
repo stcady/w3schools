@@ -33,7 +33,7 @@
 ### Databases
 * [SQL - Completed](https://www.w3schools.com/sql/default.asp)
 * [MySQL - Completed](https://www.w3schools.com/mysql/default.asp)
-* [https://www.w3schools.com/postgresql/index.php](https://www.w3schools.com/postgresql/index.php)
+* [PostgreSQL - Completed](https://www.w3schools.com/postgresql/index.php)
 * [https://www.w3schools.com/mongodb/index.php](https://www.w3schools.com/mongodb/index.php)
 
 ### Cyber Security
