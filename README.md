@@ -31,8 +31,8 @@
 * [https://www.w3schools.com/ai/default.asp](https://www.w3schools.com/ai/default.asp)
 
 ### Databases
-* [https://www.w3schools.com/sql/default.asp](https://www.w3schools.com/sql/default.asp)
-* [https://www.w3schools.com/mysql/default.asp](https://www.w3schools.com/mysql/default.asp)
+* [SQL - Completed](https://www.w3schools.com/sql/default.asp)
+* [MySQL - Completed](https://www.w3schools.com/mysql/default.asp)
 * [https://www.w3schools.com/postgresql/index.php](https://www.w3schools.com/postgresql/index.php)
 * [https://www.w3schools.com/mongodb/index.php](https://www.w3schools.com/mongodb/index.php)
 
