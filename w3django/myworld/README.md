@@ -1705,13 +1705,38 @@ In the browser window, type 127.0.0.1:8000/admin in the address bar. And fill in
 # Deploy Django
 
 ## Elastic Beanstalk (EB)
+To deploy a project means to make it visible for other people on the internet. So far, in this tutorial, we have made a Django project that runs locally on your computer. This is often called, "in development", and when we have deployed it, we call it "in production".
+
+There are many providers out there that offers servers for Django projects. In this tutorial we will use the Amazon Web Services (AWS) platform, mainly because they offer a free solution that only requires you to create an AWS account.
+
+Log into your AWS account. (If you do not have an AWS account, follow the steps in the Create AWS Account chapter). Once you have signed in, you should be directed to the AWS Console Home page. We will be using a service called "Elastic Beanstalk" to deploy the Django project. In the search field at the top, search for "elastic beanstalk", and click to start the service. Once you have started the "Elastic Beanstalk" service, we could start with the deployment, but first we need to lock in some dependencies, which means to make you local Django project ready for deployment.
 
 ## Create requirements.txt
+When you create a Django application, there are some Python packages that your project depends on. Django itself is a Python package, and we have to make sure that the server where we deploy our project also has the Django package installed, and all the other packages your project requires. Luckily there is a command for this as well, just run this command in the command view:
+```sh
+python -m pip freeze > requirements.txt
+```
+The file contains all the packages that this project depends on: with this content:
+```s
+asgiref==3.5.2
+Django==4.1.4
+psycopg2-binary==2.9.5
+sqlparse==0.4.3
+tzdata==2022.7
+whitenoise==6.2.0
+```
+Now the hosting provider knows which packages to install when we deploy our project.
 
 ## Create django.config
+We have chosen AWS as our hosting provider, and Elastic Beanstalk as a service to deploy the Django project, and it has some specific requirements. It requires that you create a folder on the root level of your project called .ebextensions. In the .ebextensions folder, create a file called django.config. Open the file and insert these settings:
+```s
+option_settings:
+  aws:elasticbeanstalk:container:python:
+    WSGIPath: my_tennis_club.wsgi:application
+```
 
 ## Create .zip File
+To wrap your project into a .zip file, you cannot zip the entire project folder, but choose the files and folders manually. With your file explorer, navigate to the project folder, select these files and folders, right-click and choose to create a zip file.
 
 ## Deploy with EB
-
-## Update Project
+In AWS, navigate to the Elastic Beanstalk application, as we did in the Choose Provider chapter, and click the "Create application" button. Once you have clicked the "Create Application" button, you will be taken to this page, where you can give your Django project a name. I will name it "my-first-django". Then scroll down until you see the "Platform" section, and choose "Python", with the recommended version. Next, scroll down to the next section, the "Application code" section, and choose "Upload your code". Click on the "Choose file" button, navigate to the .zip file you created in the previous chapter and upload it. Click the "Create application" button to start deploying. The deployment will take a few minutes.
