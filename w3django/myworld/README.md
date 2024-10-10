@@ -1632,14 +1632,75 @@ In the main.html template, we will put some of the HTML code into a div element:
 # Postgre SQL
 
 ## Introduction to Postgre SQL
+Django comes with a SQLite database which is great for testing and debugging at the beginning of a project. However, it is not very suitable for production. Django also support these database engines:
+
+* PostgreSQL
+* MariaDB
+* MySQL
+* Oracle
+
+We will take a closer look at the PostgreSQL database engine.
+
+PostgreSQL database is an open source relational database, which should cover most demands you have when creating a database for a Django project. It has a good reputation, it is reliable, and it perform well under most circumstances. We will add a PostgreSQL database to our Django project. To be able to use PostgreSQL in Django we have to install a package called psycopg2.
+
+Type this command in the command line to install the package. Make sure you are still inn the virtual environment:
+```sh
+pip install psycopg2-binary
+```
+The psycopg2 package is a driver that is necessary for PostgreSQL to work in Python. We also need a server where we can host the database. In this tutorial we have chosen the Amazon Web Services (AWS) platform, you will learn more about that in the next chapter.
 
 ## Create AWS Account
+There are many providers out there that can host Django projects and PostgreSQL databases. In this tutorial we will use the Amazon Web Services (AWS) platform, mainly because they offer a free solution that can host both Django projects and PostgreSQL databases. All you need is an AWS account. Go to aws.amazon.com, and create an account. Once you have created an AWS account, it is time to sign in for the first time. If this is your first time you sign into your AWS account, you will be directed to the AWS Console Home page.
+
+Once you have an AWS account, you can start creating a database. We will use a database service at AWS, called RDS. In the search field, search for "RDS", and click to start the service:
 
 ## Create Database in RDS
+Inside the RDS service, create a database, either by navigating to the Database section, or just click the "Create database" button. Once you have started creating a database, you will be given some choices for the type and settings of your database. This will take a few minutes, but when it is finished, you will have a new PostgreSQL database, almost ready to run on your Django project!
 
 ## Connect to Database
+To make Django able to connect to your database, you have to specify it in the DATABASES tuple in the settings.py file. Before, it looked like this:
+```python
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+```
+Now, you should change it to look like this:
+```python
+
+```
+As you can see in the settings.py file, we insert postgresql instead of sqlite.
+
+The database does not have a name, but you have to assign one in order to access the database. If no name is given, the provider accepts 'postgres' as the name of the database. Insert the username and password that you specified when you created the database.
+
+As you can see in the settings.py file, we insert postgresql instead of sqlite, and insert the username and password that we specified when we created the database. The HOST and PORT can be found under the "Connectivity & security" section in the RDS instance. They are described as "Endpoint" and "Port".
+
+Once we have done the changes in settings.py, we must run a migration in our virtual environment, before the changes will take place:
+```sh
+python manage.py migrate
+```
+Now, if you run the project:
+```sh
+python manage.py runserver
+```
+And view it in your browser: 127.0.0.1:8000/. You will get the home page of the project, but if you click on the "members" link, you will see that there are no members.
 
 ## Add Members
+The "My Tennis Club" project has no members: 127.0.0.1:8000/. That is because we have created a brand new database, and it is empty. The old SQLite database contained 5 members, so let us dive into the admin interface and add the same 5 members. But first we have to create a new superuser.
+
+Since we now have a new database, we have to create the superuser once again. This is done by typing this command in the command view:
+```sh
+python manage.py createsuperuser
+```
+Here you must enter: username, e-mail address, (you can just pick a fake e-mail address), and password.
+
+Now start the server again:
+```sh
+python manage.py runserver
+```
+In the browser window, type 127.0.0.1:8000/admin in the address bar. And fill in the form with the correct username and password. When you are in the admin interface, click the "Add" button for "Members", and start inserting new members until you have a list. In the browser window, type 127.0.0.1:8000/members in the address bar. And once again you have a Tennis Club page with 5 members!
 
 # Deploy Django
 
