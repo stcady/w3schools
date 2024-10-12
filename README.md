@@ -6,7 +6,7 @@
 ### Python & Core Python Libraries
 * [Python - Certified](https://www.w3schools.com/python/default.asp)
 * [https://www.w3schools.com/python/numpy/default.asp](https://www.w3schools.com/python/numpy/default.asp)
-* [https://www.w3schools.com/python/pandas/default.asp](https://www.w3schools.com/python/pandas/default.asp)
+* [Pandas - Completed](https://www.w3schools.com/python/pandas/default.asp)
 * [https://www.w3schools.com/python/scipy/index.php](https://www.w3schools.com/python/scipy/index.php)
 * [Django - Completed](https://www.w3schools.com/django/index.php)
 
