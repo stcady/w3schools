@@ -26,7 +26,7 @@
 * [https://www.w3schools.com/dsa/index.php](https://www.w3schools.com/dsa/index.php)
 
 ### Data Science
-* [https://www.w3schools.com/statistics/index.php](https://www.w3schools.com/statistics/index.php)
+* [Statistics - Completed](https://www.w3schools.com/statistics/index.php)
 * [https://www.w3schools.com/datascience/default.asp](https://www.w3schools.com/datascience/default.asp)
 * [https://www.w3schools.com/ai/default.asp](https://www.w3schools.com/ai/default.asp)
 
