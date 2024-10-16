@@ -27,8 +27,8 @@
 
 ### Data Science
 * [Statistics - Completed](https://www.w3schools.com/statistics/index.php)
-* [https://www.w3schools.com/datascience/default.asp](https://www.w3schools.com/datascience/default.asp)
-* [https://www.w3schools.com/ai/default.asp](https://www.w3schools.com/ai/default.asp)
+* [Data Science - Completed](https://www.w3schools.com/datascience/default.asp)
+* [AI - Completed](https://www.w3schools.com/ai/default.asp)
 
 ### Databases
 * [SQL - Completed](https://www.w3schools.com/sql/default.asp)
