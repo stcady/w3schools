@@ -10,15 +10,6 @@
 * [SciPy - Completed](https://www.w3schools.com/python/scipy/index.php)
 * [Django - Completed](https://www.w3schools.com/django/index.php)
 
-### R
-* [https://www.w3schools.com/r/default.asp](https://www.w3schools.com/r/default.asp)
-
-### Java
-* [https://www.w3schools.com/java/default.asp](https://www.w3schools.com/java/default.asp)
-
-### Kotlin
-* [https://www.w3schools.com/kotlin/index.php](https://www.w3schools.com/kotlin/index.php)
-
 ### Golang
 * [Go - Certified](https://www.w3schools.com/go/index.php)
 
@@ -58,3 +49,12 @@
 * [https://www.w3schools.com/react/default.asp](https://www.w3schools.com/react/default.asp)
 * [https://www.w3schools.com/typescript/index.php](https://www.w3schools.com/typescript/index.php)
 * [https://www.w3schools.com/vue/index.php](https://www.w3schools.com/vue/index.php)
+
+### R
+* [https://www.w3schools.com/r/default.asp](https://www.w3schools.com/r/default.asp)
+
+### Java
+* [https://www.w3schools.com/java/default.asp](https://www.w3schools.com/java/default.asp)
+
+### Kotlin
+* [https://www.w3schools.com/kotlin/index.php](https://www.w3schools.com/kotlin/index.php)
