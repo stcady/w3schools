@@ -242,4 +242,220 @@ The following operators assist with updating arrays.
 * $push: Adds an element to an array
 
 ## Aggregation Pipelines
+Aggregation operations allow you to group, sort, perform calculations, analyze data, and much more.
 
+Aggregation pipelines can have one or more "stages". The order of these stages are important. Each stage acts upon the results of the previous stage.
+
+```sh
+db.posts.aggregate([
+  // Stage 1: Only find documents that have more than 1 like
+  {
+    $match: { likes: { $gt: 1 } }
+  },
+  // Stage 2: Group documents by category and sum each categories likes
+  {
+    $group: { _id: "$category", totalLikes: { $sum: "$likes" } }
+  }
+])
+```
+Sample Data
+To demonstrate the use of stages in a aggregation pipeline, we will load sample data into our database.
+
+From the MongoDB Atlas dashboard, go to Databases. Click the ellipsis and select "Load Sample Dataset". This will load several sample datasets into your database.
+
+## Aggregation $group
+This aggregation stage groups documents by the unique _id expression provided.
+
+Don't confuse this _id expression with the _id ObjectId provided to each document.
+
+In this example, we are using the "sample_airbnb" database loaded from our sample data in the Intro to Aggregations section.
+
+```sh
+db.listingsAndReviews.aggregate(
+    [ { $group : { _id : "$property_type" } } ]
+)
+```
+This will return the distinct values from the property_type field.
+
+## Aggregation $limit
+This aggregation stage limits the number of documents passed to the next stage.
+
+In this example, we are using the "sample_mflix" database loaded from our sample data in the Intro to Aggregations section.
+
+```sh
+db.movies.aggregate([ { $limit: 1 } ])
+```
+This will return the 1 movie from the collection.
+
+## Aggregation $project
+This aggregation stage passes only the specified fields along to the next aggregation stage.
+
+This is the same projection that is used with the find() method.
+
+In this example, we are using the "sample_restaurants" database loaded from our sample data in the Intro to Aggregations section.
+
+```sh
+db.restaurants.aggregate([
+  {
+    $project: {
+      "name": 1,
+      "cuisine": 1,
+      "address": 1
+    }
+  },
+  {
+    $limit: 5
+  }
+])
+```
+This will return the documents but only include the specified fields.
+
+Notice that the _id field is also included. This field is always included unless specifically excluded.
+
+We use a 1 to include a field and 0 to exclude a field.
+
+Note: You cannot use both 0 and 1 in the same object. The only exception is the _id field. You should either specify the fields you would like to include or the fields you would like to exclude.
+
+## Aggregation $sort
+This aggregation stage groups sorts all documents in the specified sort order.
+
+Remember that the order of your stages matters. Each stage only acts upon the documents that previous stages provide.
+
+In this example, we are using the "sample_airbnb" database loaded from our sample data in the Intro to Aggregations section.
+
+```sh
+db.listingsAndReviews.aggregate([ 
+  { 
+    $sort: { "accommodates": -1 } 
+  },
+  {
+    $project: {
+      "name": 1,
+      "accommodates": 1
+    }
+  },
+  {
+    $limit: 5
+  }
+])
+```
+This will return the documents sorted in descending order by the accommodates field.
+
+The sort order can be chosen by using 1 or -1. 1 is ascending and -1 is descending.
+
+## Aggregation $match
+This aggregation stage behaves like a find. It will filter documents that match the query provided.
+
+Using $match early in the pipeline can improve performance since it limits the number of documents the next stages must process.
+
+In this example, we are using the "sample_airbnb" database loaded from our sample data in the Intro to Aggregations section.
+
+```sh
+db.listingsAndReviews.aggregate([ 
+  { $match : { property_type : "House" } },
+  { $limit: 2 },
+  { $project: {
+    "name": 1,
+    "bedrooms": 1,
+    "price": 1
+  }}
+])
+```
+This will only return documents that have the property_type of "House".
+
+## Aggregation $addFields
+This aggregation stage adds new fields to documents.
+
+In this example, we are using the "sample_restaurants" database loaded from our sample data in the Intro to Aggregations section.
+
+```sh
+db.restaurants.aggregate([
+  {
+    $addFields: {
+      avgGrade: { $avg: "$grades.score" }
+    }
+  },
+  {
+    $project: {
+      "name": 1,
+      "avgGrade": 1
+    }
+  },
+  {
+    $limit: 5
+  }
+])
+```
+This will return the documents along with a new field, avgGrade, which will contain the average of each restaurants grades.score.
+
+## Aggregation $count
+This aggregation stage counts the total amount of documents passed from the previous stage.
+
+In this example, we are using the "sample_restaurants" database loaded from our sample data in the Intro to Aggregations section.
+
+```sh
+db.restaurants.aggregate([
+  {
+    $match: { "cuisine": "Chinese" }
+  },
+  {
+    $count: "totalChinese"
+  }
+])
+```
+This will return the number of documents at the $count stage as a field called "totalChinese".
+
+## Aggregation $lookup
+This aggregation stage performs a left outer join to a collection in the same database.
+
+There are four required fields:
+
+* from: The collection to use for lookup in the same database
+* localField: The field in the primary collection that can be used as a unique identifier in the from collection.
+* foreignField: The field in the from collection that can be used as a unique identifier in the primary collection.
+* as: The name of the new field that will contain the matching documents from the from collection.
+
+In this example, we are using the "sample_mflix" database loaded from our sample data in the Intro to Aggregations section.
+
+```sh
+db.comments.aggregate([
+  {
+    $lookup: {
+      from: "movies",
+      localField: "movie_id",
+      foreignField: "_id",
+      as: "movie_details",
+    },
+  },
+  {
+    $limit: 1
+  }
+])
+```
+This will return the movie data along with each comment.
+
+## Aggregation $out
+This aggregation stage writes the returned documents from the aggregation pipeline to a collection.
+
+The $out stage must be the last stage of the aggregation pipeline.
+
+In this example, we are using the "sample_airbnb" database loaded from our sample data in the Intro to Aggregations section.
+
+```sh
+db.listingsAndReviews.aggregate([
+  {
+    $group: {
+      _id: "$property_type",
+      properties: {
+        $push: {
+          name: "$name",
+          accommodates: "$accommodates",
+          price: "$price",
+        },
+      },
+    },
+  },
+  { $out: "properties_by_type" },
+])
+```
+The first stage will group properties by the property_type and include the name, accommodates, and price fields for each. The $out stage will create a new collection called properties_by_type in the current database and write the resulting documents into that collection.
