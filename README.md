@@ -28,7 +28,7 @@
 * [https://www.w3schools.com/mongodb/index.php](https://www.w3schools.com/mongodb/index.php)
 
 ### Cyber Security
-* [https://www.w3schools.com/cybersecurity/index.php](https://www.w3schools.com/cybersecurity/index.php)
+* [Cyber Security - Completed](https://www.w3schools.com/cybersecurity/index.php)
 
 ### AWS
 * [https://www.w3schools.com/training/aws/home/](https://www.w3schools.com/training/aws/home/)
